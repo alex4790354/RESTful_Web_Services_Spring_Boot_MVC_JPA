@@ -13,6 +13,9 @@ public class UserRest {
 		this.email = email;
 	}
 
+	public UserRest() {
+	}
+
 	public String getUserId() {
 		return userId;
 	}
