@@ -7,6 +7,7 @@ import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,7 +19,8 @@ public class UserController {
 	UserService userService;
 
 
-	@GetMapping(path= "/{userId}")
+	@GetMapping(path= "/{userId}",
+			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE } )
 	public UserRest getUser(@PathVariable String userId)	{
 
 		UserDto userDto = userService.getUserByUserId(userId);
@@ -28,7 +30,10 @@ public class UserController {
 		return returnValue;
 	}
 	
-	@PostMapping
+	@PostMapping(
+			consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
+			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
+			)
 	public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) 	{
 
 		UserRest returnValue = new UserRest();
