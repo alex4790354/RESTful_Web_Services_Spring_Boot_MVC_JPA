@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 public interface UserService extends UserDetailsService {
 	UserDto createUser(UserDto user);
@@ -16,6 +18,5 @@ public interface UserService extends UserDetailsService {
 
 	void deleteUser(String userId);
 
-	/*
-	List<UserDto> getUsers(int page, int limit);*/
+	List<UserDto> getUsers(int page, int limit);
 }
