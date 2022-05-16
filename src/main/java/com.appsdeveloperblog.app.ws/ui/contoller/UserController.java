@@ -5,8 +5,9 @@ import com.appsdeveloperblog.app.ws.service.UserService;
 import com.appsdeveloperblog.app.ws.shared.dto.UserDto;
 import com.appsdeveloperblog.app.ws.ui.model.request.UserDetailsRequestModel;
 import com.appsdeveloperblog.app.ws.ui.model.response.ErrorMessages;
+import com.appsdeveloperblog.app.ws.ui.model.response.OperationStatusModel;
+import com.appsdeveloperblog.app.ws.ui.model.response.RequestOperationStatus;
 import com.appsdeveloperblog.app.ws.ui.model.response.UserRest;
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -52,14 +53,36 @@ public class UserController {
 		return returnValue;
 	}
 	
-	@PutMapping
-	public String updateUser() {
-		return "Put = update user was called";
+	@PutMapping(path= "/{userId}",
+			consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
+			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }
+	)
+	public UserRest updateUser(@PathVariable String userId,
+							 @RequestBody UserDetailsRequestModel userDetails) throws Exception {
+
+		UserRest returnValue = new UserRest();
+
+		UserDto userDto = new UserDto();
+		BeanUtils.copyProperties(userDetails, userDto);
+
+		UserDto updateUser = userService.updateUser(userId, userDto);
+		BeanUtils.copyProperties(updateUser, returnValue);
+
+		return returnValue;
+
 	}
-	
-	@DeleteMapping
-	public String deleteUser() {
-		return "delete user was called";
+
+	@DeleteMapping(path= "/{userId}",
+			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	public OperationStatusModel deleteUser(@PathVariable String userId)
+	{
+		OperationStatusModel returnValue = new OperationStatusModel();
+		returnValue.setOperationName(RequestOperationName.DELETE.name());
+
+		userService.deleteUser(userId);
+
+		returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		return returnValue;
 	}
 
 }
